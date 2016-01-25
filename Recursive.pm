@@ -255,10 +255,10 @@ sub dircopy {
               my $rc;
               if (!-w $org && $KeepMode) {
                   local $KeepMode = 0;
-                  carp "Copying readonly directory ($org); mode will not be preserved.";
+                  carp "Copying readonly directory ($org); mode of its contents may not be preserved.";
                   $rc = $recurs->($org,$new,$buf) if defined $buf;
                   $rc = $recurs->($org,$new) if !defined $buf;
-                  # TODO?: drop carp above and: chmod scalar((stat($org))[2]), $new;
+                  chmod scalar((stat($org))[2]), $new;
               }
               else {
                   $rc = $recurs->($org,$new,$buf) if defined $buf;
