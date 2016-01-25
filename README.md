@@ -8,7 +8,5 @@ So I am finally making a plan to give this the attentiuon it deserves.
 ## Goals
 
 1. Fix the [RTs](https://rt.cpan.org/Dist/Display.html?Queue=File-Copy-Recursive) (pull requests welcome!)
-2. Modernize the code and interface
-3. Do not break existing consumers of the legacy interface
-
-I will create issues/branches for items 2 and 3 as they progress if you'd like to help.
+2. Modernize the code and interface–Issue #2
+3. Do not break existing consumers of the legacy interface–Issue #1
