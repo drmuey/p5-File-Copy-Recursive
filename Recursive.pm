@@ -292,13 +292,12 @@ sub rmove_glob {
 sub dirmove { $move->(0, @_) }
 
 sub pathmk {
-   my ($volume, $dir) = File::Spec->splitpath(shift());
-   my @parts = File::Spec->splitdir( $dir );
+   my @parts = File::Spec->splitdir( shift() );
    my $nofatal = shift;
-   my $pth = File::Spec->catdir($volume,$parts[0]);
+   my $pth = $parts[0];
    my $zer = 0;
    if(!$pth) {
-      $pth = File::Spec->catdir($volume,$parts[0],$parts[1]);
+      $pth = File::Spec->catdir($parts[0],$parts[1]);
       $zer = 1;
    }
    for($zer..$#parts) {
