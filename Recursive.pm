@@ -290,6 +290,7 @@ sub dircopy {
               }
           }
       }
+      $level--;
       1;
    };
 
