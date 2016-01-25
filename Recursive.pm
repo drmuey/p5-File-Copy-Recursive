@@ -146,9 +146,11 @@ sub fcopy {
       pathmk(File::Spec->catpath($volm,$path,''), $NoFtlPth);
    }
    if( -l $_[0] && $CopyLink ) {
+      my $target = readlink(shift());
+      ($target) = $target =~ m/(.*)/; # mass-untaint is OK since we have to allow what the file system does
       carp "Copying a symlink ($_[0]) whose target does not exist" 
-          if !-e readlink($_[0]) && $BdTrgWrn;
-      symlink readlink(shift()), shift() or return;
+          if !-e $target && $BdTrgWrn;
+      symlink $target, shift() or return;
    } else {  
       copy(@_) or return;
 
@@ -242,9 +244,11 @@ sub dircopy {
           my $org = File::Spec->catfile($str, $file_ut);
           my $new = File::Spec->catfile($end, $file_ut);
           if( -l $org && $CopyLink ) {
+              my $target = readlink($org);
+              ($target) = $target =~ m/(.*)/; # mass-untaint is OK since we have to allow what the file system does
               carp "Copying a symlink ($org) whose target does not exist" 
-                  if !-e readlink($org) && $BdTrgWrn;
-              symlink readlink($org), $new or return;
+                  if !-e $target && $BdTrgWrn;
+              symlink $target, $new or return;
           } 
           elsif(-d $org) {
               $recurs->($org,$new,$buf) if defined $buf;
