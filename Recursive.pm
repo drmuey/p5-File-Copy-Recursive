@@ -252,8 +252,26 @@ sub dircopy {
               symlink $target, $new or return;
           } 
           elsif(-d $org) {
-              $recurs->($org,$new,$buf) if defined $buf;
-              $recurs->($org,$new) if !defined $buf;
+              my $rc;
+              if (!-w $org && $KeepMode) {
+                  local $KeepMode = 0;
+                  carp "Copying readonly directory ($org); mode will not be preserved.";
+                  $rc = $recurs->($org,$new,$buf) if defined $buf;
+                  $rc = $recurs->($org,$new) if !defined $buf;
+                  # TODO?: drop carp above and: chmod scalar((stat($org))[2]), $new;
+              }
+              else {
+                  $rc = $recurs->($org,$new,$buf) if defined $buf;
+                  $rc = $recurs->($org,$new) if !defined $buf;
+              }
+              if (!$rc) {
+                  if($SkipFlop) {
+                      next;
+                  }
+                  else {
+                      return;
+                  }
+              }
               $filen++;
               $dirn++;
           } 
@@ -302,8 +320,12 @@ sub pathmk {
    my $pth = $parts[0];
    my $zer = 0;
    if(!$pth) {
-      $pth = File::Spec->catdir($parts[0],$parts[1]);
+      $pth = File::Spec->catpath($parts[0],$parts[1]);
       $zer = 1;
+   }
+   if(!$pth) {
+      $pth = File::Spec->catpath($parts[0],$parts[1],$parts[2]);
+      $zer = 2;
    }
    for($zer..$#parts) {
       $DirPerms = oct($DirPerms) if substr($DirPerms,0,1) eq '0';
