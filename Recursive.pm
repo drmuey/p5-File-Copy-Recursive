@@ -81,7 +81,7 @@ my $glob = sub {
     local $CPRFComp = 1;
     
     my @rt;
-    for my $path ( glob($src_glob) ) {
+    for my $path ( File::Glob::glob($src_glob) ) {
         my @call = [$do->($path, @args)] or return;
         push @rt, \@call;
     }
@@ -457,7 +457,7 @@ This is important because if it's a directory in list context and there is only 
 
 =head2 rcopy_glob()
 
-This function lets you specify a pattern suitable for perl's glob() as the first argument. Subsequently each path returned by perl's glob() gets rcopy()ied.
+This function lets you specify a pattern suitable for perl's File::Glob::glob() as the first argument. Subsequently each path returned by perl's File::Glob::glob() gets rcopy()ied.
 
 It returns and array whose items are array refs that contain the return value of each rcopy() call.
 
