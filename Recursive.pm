@@ -292,7 +292,7 @@ sub rmove_glob {
 sub dirmove { $move->(0, @_) }
 
 sub pathmk {
-   my @parts = File::Spec->splitdir( shift() );
+   my @parts = File::Spec->splitpath( shift() );
    my $nofatal = shift;
    my $pth = $parts[0];
    my $zer = 0;
