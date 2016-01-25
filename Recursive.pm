@@ -59,6 +59,11 @@ my $samecheck = sub {
       my $abs = File::Spec->rel2abs($_[1]);
       my @pth = File::Spec->splitdir( $abs );
       while(@pth) {
+          if ($pth[-1] eq '..') { # cheaper than Cwd::realpath() plus we don't want to resolve symlinks at this point, right?
+              pop @pth;
+              pop @pth unless -l File::Spec->catdir(@pth);
+              next;
+          }
          my $cur = File::Spec->catdir(@pth);
          last if !$cur; # probably not necessary, but nice to have just in case :)
          my $two = join( '-', ( stat $cur )[0,1] ) || '';
