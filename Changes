@@ -103,7 +103,7 @@ Revision history for Perl extension File::Copy::Recursive.
 	- Fixed absolute path bug in pathmk()
 
 0.11  Sun Aug 21 16:04:10 2005
-	- Added the *move and path* funtions
+	- Added the *move and path* functions
 	- Added $CopyLoop
 	- Made fcopy() recursively create its base directories if necessary like dircopy() did in 0.09 on
 
