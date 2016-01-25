@@ -354,11 +354,11 @@ sub pathempty {
    my $pth_dh;
    if ( $] < 5.006 ) {
        opendir(PTH_DH, $pth) or return;
-       @names = grep !/^\.+$/, readdir(PTH_DH);
+       @names = grep !/^\.\.?$/, readdir(PTH_DH);
    }
    else {
        opendir($pth_dh, $pth) or return;
-       @names = grep !/^\.+$/, readdir($pth_dh);       
+       @names = grep !/^\.\.?$/, readdir($pth_dh);
    }
    
    for my $name (@names) {
