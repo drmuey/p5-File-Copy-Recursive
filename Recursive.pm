@@ -151,7 +151,9 @@ sub fcopy {
       ($target) = $target =~ m/(.*)/; # mass-untaint is OK since we have to allow what the file system does
       carp "Copying a symlink ($_[0]) whose target does not exist" 
           if !-e $target && $BdTrgWrn;
-      symlink $target, shift() or return;
+      my $new = shift();
+      unlink $new if -l $new;
+      symlink($target, $new) or return;
    } else {  
       copy(@_) or return;
 
@@ -249,7 +251,8 @@ sub dircopy {
               ($target) = $target =~ m/(.*)/; # mass-untaint is OK since we have to allow what the file system does
               carp "Copying a symlink ($org) whose target does not exist" 
                   if !-e $target && $BdTrgWrn;
-              symlink $target, $new or return;
+              unlink $new if -l $new;
+              symlink($target, $new) or return;
           } 
           elsif(-d $org) {
               my $rc;
