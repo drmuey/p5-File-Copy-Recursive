@@ -11,6 +11,7 @@ use warnings;
 use Carp;
 use File::Copy;
 use File::Spec;    #not really needed because File::Copy already gets it, but for good measure :)
+use File::Glob;
 
 use vars qw(
   @ISA      @EXPORT_OK $VERSION  $MaxDepth $KeepMode $CPRFComp $CopyLink
@@ -22,23 +23,23 @@ require Exporter;
 @ISA       = qw(Exporter);
 @EXPORT_OK = qw(fcopy rcopy dircopy fmove rmove dirmove pathmk pathrm pathempty pathrmdir rcopy_glob rmove_glob);
 
-$VERSION = '0.38';
+$VERSION = '0.39';
 
-$MaxDepth = 0;
-$KeepMode = 1;
-$CPRFComp = 0;
-$CopyLink = eval { local $SIG{'__DIE__'}; symlink '', ''; 1 } || 0;
-$PFSCheck = 1;
-$RemvBase = 0;
-$NoFtlPth = 0;
-$ForcePth = 0;
-$CopyLoop = 0;
-$RMTrgFil = 0;
-$RMTrgDir = 0;
-$CondCopy = {};
-$BdTrgWrn = 0;
-$SkipFlop = 0;
-$DirPerms = 0777;
+$MaxDepth = defined $MaxDepth ? $MaxDepth : 0;
+$KeepMode = defined $KeepMode ? $KeepMode : 1;
+$CPRFComp = defined $CPRFComp ? $CPRFComp : 0;
+$CopyLink = defined $CopyLink ? $CopyLink : eval { local $SIG{'__DIE__'}; symlink '', ''; 1 } || 0;
+$PFSCheck = defined $PFSCheck ? $PFSCheck : 1;
+$RemvBase = defined $RemvBase ? $RemvBase : 0;
+$NoFtlPth = defined $NoFtlPth ? $NoFtlPth : 0;
+$ForcePth = defined $ForcePth ? $ForcePth : 0;
+$CopyLoop = defined $CopyLoop ? $CopyLoop : 0;
+$RMTrgFil = defined $RMTrgFil ? $RMTrgFil : 0;
+$RMTrgDir = defined $RMTrgDir ? $RMTrgDir : 0;
+$CondCopy = defined $CondCopy ? $CondCopy : {};
+$BdTrgWrn = defined $BdTrgWrn ? $BdTrgWrn : 0;
+$SkipFlop = defined $SkipFlop ? $SkipFlop : 0;
+$DirPerms = defined $DirPerms ? $DirPerms : 0777;
 
 my $samecheck = sub {
     return 1 if $^O eq 'MSWin32';    # need better way to check for this on winders...

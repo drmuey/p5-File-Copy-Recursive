@@ -9,6 +9,10 @@ my $builder = Module::Build->new(
     dist_version_from => 'lib/File/Copy/Recursive.pm',
     requires          => {
         'Test::More' => 0,
+        'Test::Exception' => 0,
+        'File::Temp' => 0,
+        
+        # Legacy only
         'File::Copy' => 0,
         'File::Spec' => 0,
     },

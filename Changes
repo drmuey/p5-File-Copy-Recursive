@@ -1,5 +1,9 @@
 Revision history for File-Copy-Recursive
 
+0.39  ???
+    - Deprecate legacy interface (but still support existing code)
+    - ???
+
 0.38  
     - do rmove() symlink fixups like rcopy() from ver 0.37
     - rt 29750 (added $DirPerms)

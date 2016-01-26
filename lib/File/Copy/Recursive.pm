@@ -2,8 +2,44 @@ package File::Copy::Recursive;
 
 use strict;
 use warnings;
+use Carp qw(carp croak);
+our $VERSION = 0.39;
 
-use File::Copy::Recursive::Legacy;
+## TODO: modern interface goes here
+
+LEGACY_SUPPORT: {
+    our $AUTOLOAD;
+
+    my %legacy_funcs = ( fcopy => 1, rcopy => 1, dircopy => 1, fmove => 1, rmove => 1, dirmove => 1, pathmk => 1, pathrm => 1, pathempty => 1, pathrmdir => 1, rcopy_glob => 1, rmove_glob => 1, );
+
+    sub import {
+        my ( $self, @lfuncs ) = @_;
+        my $caller = caller();
+        for my $legacy_func (@lfuncs) {
+            if ( exists $legacy_funcs{$legacy_func} ) {
+                require File::Copy::Recursive::Legacy;
+                no strict 'refs';  ## no critic
+                *{$caller . "::$legacy_func"} = \&{ "File::Copy::Recursive::$legacy_func" };
+            }
+            else {
+                die qq{"$legacy_func" is not exported by the File::Copy::Recursive module\n};
+            }
+        }
+    }
+
+    sub AUTOLOAD {
+        my $legacy_func = $AUTOLOAD;
+        $legacy_func =~ s/.*:://;
+        if ( exists $legacy_funcs{$legacy_func} ) {
+            require File::Copy::Recursive::Legacy;
+            no strict 'refs';  ## no critic
+            goto &{$AUTOLOAD};
+        }
+        else {
+            croak "Undefined subroutine &$AUTOLOAD called";
+        }
+    }
+}
 
 1;
 
@@ -11,12 +47,17 @@ __END__
 
 =head1 NAME
 
-File::Copy::Recursive - [One line description of module's purpose here]
-
+File::Copy::Recursive - Recursively copy/move files, directories, and symlinks.
 
 =head1 VERSION
 
-This document describes File::Copy::Recursive version 0.01
+This document describes File::Copy::Recursive version 0.39
+
+=head2 LEGACY INTERFACE
+
+The legacy interface still works with no changes to existing code.
+
+The legacy interface documentation can be found at L<File::Copy::Recursive::Legacy>.
 
 =head1 SYNOPSIS
 
@@ -66,18 +107,9 @@ This document describes File::Copy::Recursive version 0.01
 
 =back
 
-
 =head1 CONFIGURATION AND ENVIRONMENT
 
-=for author to fill in:
-    A full explanation of any configuration system(s) used by the
-    module, including the names and locations of any configuration
-    files, and the meaning of any environment variables or properties
-    that can be set. These descriptions must also include details of any
-    configuration language used.
-  
 File::Copy::Recursive requires no configuration files or environment variables.
-
 
 =head1 DEPENDENCIES
 
@@ -89,19 +121,6 @@ File::Copy::Recursive requires no configuration files or environment variables.
 
 None.
 
-
-=head1 INCOMPATIBILITIES AND LIMITATIONS
-
-=for author to fill in:
-    A list of any modules that this module cannot be used in conjunction
-    with. This may be due to name conflicts in the interface, or
-    competition for system or program resources, or due to internal
-    limitations of Perl (for example, many modules that use source code
-    filters are mutually incompatible).
-
-None reported.
-
-
 =head1 BUGS AND FEATURES
 
 Please report any bugs or feature requests (and a pull request for bonus points)
@@ -111,14 +130,12 @@ Please report any bugs or feature requests (and a pull request for bonus points)
 
 Daniel Muey  C<< <http://drmuey.com/cpan_contact.pl> >>
 
-
 =head1 LICENCE AND COPYRIGHT
 
 Copyright (c) 2016, Daniel Muey C<< <http://drmuey.com/cpan_contact.pl> >>. All rights reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself. See L<perlartistic>.
-
 
 =head1 DISCLAIMER OF WARRANTY
 

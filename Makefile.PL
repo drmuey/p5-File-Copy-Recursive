@@ -18,6 +18,10 @@ WriteMakefile(
     PL_FILES      => {},
     PREREQ_PM     => {
         'Test::More' => 0,
+        'Test::Exception' => 0,
+        'File::Temp' => 0,
+        
+        # Legacy only
         'File::Copy' => 0,
         'File::Spec' => 0,
     },
