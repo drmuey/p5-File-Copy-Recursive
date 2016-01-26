@@ -1,45 +1,33 @@
-File/Copy/Recursive version 0.38
-================================
+File-Copy-Recursive version 0.38
 
-This module has 3 functions, one to copy files only, one to copy directories 
-only and one to do either depending on the argument's type.
+DOCUMENTATION
 
-The depth to which a directory structure is copied can be set with:
-
- $File::Copy::Recursive::Maxdepth
-
-setting it back to false or non numeric value will turn it back to unlimited.
-
-All functions attempt to preserve each copied file's mode unless you set
- $File::Copy::Recursive::KeepMode
-to false.
-
-See
- perldoc File::Copy::Recursive
-for more info
+See POD for documentation.
 
 INSTALLATION
 
-To install this module type the following:
+To install this module, run the following commands:
 
-   perl Makefile.PL
-   make
-   make test
-   make install
+	perl Makefile.PL
+	make
+	make test
+	make install
 
-or
- perl -MCPAN -e 'install File::Copy::Recursive;'
+Alternatively, to install with Module::Build, you can use the following commands:
+
+	perl Build.PL
+	./Build
+	./Build test
+	./Build install
 
 DEPENDENCIES
 
-This module requires these other modules and libraries:
-
- File::Copy
- File::Spec
+See DEPENDENCIES section in POD, 'requires' key in Build.PL,
+or 'PREREQ_PM' key in Makefile.PL
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2004 Daniel Muey
+Copyright (C) 2016, Daniel Muey
 
 This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself. 
+it under the same terms as Perl itself.

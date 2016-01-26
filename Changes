@@ -1,4 +1,4 @@
-Revision history for Perl extension File::Copy::Recursive.
+Revision history for File-Copy-Recursive
 
 0.38  
     - do rmove() symlink fixups like rcopy() from ver 0.37
