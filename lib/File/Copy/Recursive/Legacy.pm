@@ -330,10 +330,11 @@ sub rmove_glob {
 sub dirmove { $move->( 0, @_ ) }
 
 sub pathmk {
-    my @parts   = File::Spec->splitpath( shift() );
+    my ( $volume, @parts ) = File::Spec->splitpath( shift() );
     my $nofatal = shift;
-    my $pth     = $parts[0];
-    my $zer     = 0;
+    @parts  = File::Spec->splitdir( File::Spec->catdir(@parts));
+    my $pth = File::Spec->catdir($volume, $parts[0]);
+    my $zer = 0;
     if ( !$pth ) {
         $pth = File::Spec->catpath( $parts[0], $parts[1] );
         $zer = 1;
