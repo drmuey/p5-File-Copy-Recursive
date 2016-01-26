@@ -14,7 +14,7 @@ use File::Spec;    #not really needed because File::Copy already gets it, but fo
 use File::Glob;
 
 use vars qw(
-  @ISA      @EXPORT_OK $VERSION  $MaxDepth $KeepMode $CPRFComp $CopyLink
+  @ISA      @EXPORT_OK $MaxDepth $KeepMode $CPRFComp $CopyLink
   $PFSCheck $RemvBase $NoFtlPth  $ForcePth $CopyLoop $RMTrgFil $RMTrgDir
   $CondCopy $BdTrgWrn $SkipFlop  $DirPerms
 );
@@ -22,8 +22,6 @@ use vars qw(
 require Exporter;
 @ISA       = qw(Exporter);
 @EXPORT_OK = qw(fcopy rcopy dircopy fmove rmove dirmove pathmk pathrm pathempty pathrmdir rcopy_glob rmove_glob);
-
-$VERSION = '0.39';
 
 $MaxDepth = defined $MaxDepth ? $MaxDepth : 0;
 $KeepMode = defined $KeepMode ? $KeepMode : 1;
