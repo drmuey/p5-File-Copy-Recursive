@@ -4,4 +4,5 @@ MANIFEST
 README
 lib/File/Copy/Recursive.pm
 t/00.load.t
+t/01.legacy.t
 META.yml                                Module meta-data (added by MakeMaker)

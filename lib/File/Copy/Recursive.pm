@@ -86,6 +86,7 @@ my $glob = sub {
     my ( $do, $src_glob, @args ) = @_;
 
     local $CPRFComp = 1;
+    require File::Glob;
 
     my @rt;
     for my $path ( File::Glob::glob($src_glob) ) {
