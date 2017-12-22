@@ -336,7 +336,7 @@ sub pathmk {
     my $pth     = $parts[0];
     my $zer     = 0;
     if ( !$pth ) {
-        $pth = File::Spec->catpath( $parts[0], $parts[1] );
+        $pth = File::Spec->catpath( $parts[0], $parts[1], '' );
         $zer = 1;
     }
     if ( !$pth ) {
