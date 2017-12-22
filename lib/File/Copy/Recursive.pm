@@ -11,6 +11,7 @@ use warnings;
 use Carp;
 use File::Copy;
 use File::Spec;    #not really needed because File::Copy already gets it, but for good measure :)
+use Cwd ();
 
 use vars qw(
   @ISA      @EXPORT_OK $VERSION  $MaxDepth $KeepMode $CPRFComp $CopyLink
@@ -356,64 +357,89 @@ sub pathmk {
 sub pathempty {
     my $pth = shift;
 
-    return 2 if !-d $pth;
+    my ( $orig_dev, $orig_ino ) = ( lstat $pth )[ 0, 1 ];
+    return 2 if !-d _ || !$orig_dev || !$orig_ino;
+
+    my $starting_point = Cwd::cwd();
+    my ( $starting_dev, $starting_ino ) = ( lstat $starting_point )[ 0, 1 ];
+    chdir($pth) or Carp::croak("Failed to change directory to “$pth”: $!");
+    $pth = '.';
+    _bail_if_changed( $pth, $orig_dev, $orig_ino );
 
     my @names;
     my $pth_dh;
     if ( $] < 5.006 ) {
         opendir( PTH_DH, $pth ) or return;
         @names = grep !/^\.\.?$/, readdir(PTH_DH);
+        closedir PTH_DH;
     }
     else {
         opendir( $pth_dh, $pth ) or return;
         @names = grep !/^\.\.?$/, readdir($pth_dh);
+        closedir $pth_dh;
     }
+    _bail_if_changed( $pth, $orig_dev, $orig_ino );
 
     for my $name (@names) {
         my ($name_ut) = $name =~ m{ (.*) }xms;
         my $flpth = File::Spec->catdir( $pth, $name_ut );
 
         if ( -l $flpth ) {
+            _bail_if_changed( $pth, $orig_dev, $orig_ino );
             unlink $flpth or return;
         }
         elsif ( -d $flpth ) {
+            _bail_if_changed( $pth, $orig_dev, $orig_ino );
             pathrmdir($flpth) or return;
         }
         else {
+            _bail_if_changed( $pth, $orig_dev, $orig_ino );
             unlink $flpth or return;
         }
     }
 
-    if ( $] < 5.006 ) {
-        closedir PTH_DH;
-    }
-    else {
-        closedir $pth_dh;
-    }
+    chdir($starting_point) or Carp::croak("Failed to change directory to “$starting_point”: $!");
+    _bail_if_changed( ".", $starting_dev, $starting_ino );
 
-    1;
+    return 1;
 }
 
 sub pathrm {
-    my $path = shift;
-    return 2 if !-d $path;
-    my @pth   = File::Spec->splitdir($path);
-    my $force = shift;
+    my ( $path, $force, $nofail ) = @_;
+
+    my ( $orig_dev, $orig_ino ) = ( lstat $path )[ 0, 1 ];
+    return 2 if !-d _ || !$orig_dev || !$orig_ino;
+
+    my @pth = File::Spec->splitdir($path);
+
+    my %fs_check;
+    my $aggregate_path;
+    for my $part (@pth) {
+        $aggregate_path = defined $aggregate_path ? File::Spec->catdir( $aggregate_path, $part ) : $part;
+        $fs_check{$aggregate_path} = [ ( lstat $aggregate_path )[ 0, 1 ] ];
+    }
 
     while (@pth) {
         my $cur = File::Spec->catdir(@pth);
         last if !$cur;    # necessary ???
-        if ( !shift() ) {
-            pathempty($cur) or return if $force;
-            rmdir $cur or return;
+
+        if ($force) {
+            _bail_if_changed( $cur, $fs_check{$cur}->[0], $fs_check{$cur}->[1] );
+            if ( !pathempty($cur) ) {
+                return unless $nofail;
+            }
+        }
+        _bail_if_changed( $cur, $fs_check{$cur}->[0], $fs_check{$cur}->[1] );
+        if ($nofail) {
+            rmdir $cur;
         }
         else {
-            pathempty($cur) if $force;
-            rmdir $cur;
+            rmdir $cur or return;
         }
         pop @pth;
     }
-    1;
+
+    return 1;
 }
 
 sub pathrmdir {
@@ -425,9 +451,25 @@ sub pathrmdir {
         return 2;
     }
 
-    pathempty($dir) or return;
+    my ( $orig_dev, $orig_ino ) = ( lstat $dir )[ 0, 1 ];
+    return 2 if !$orig_dev || !$orig_ino;
 
+    pathempty($dir) or return;
+    _bail_if_changed( $dir, $orig_dev, $orig_ino );
     rmdir $dir or return;
+
+    return 1;
+}
+
+sub _bail_if_changed {
+    my ( $path, $orig_dev, $orig_ino ) = @_;
+
+    my ( $cur_dev, $cur_ino ) = ( lstat $path )[ 0, 1 ];
+    if ( $orig_dev ne $cur_dev || $orig_ino ne $cur_ino ) {
+        local $Carp::CarpLevel += 1;
+        $path = Cwd::abs_path($path);
+        Carp::croak("directory $path changed: expected dev=$orig_dev ino=$orig_ino, actual dev=$cur_dev ino=$cur_ino, aborting");
+    }
 }
 
 1;
