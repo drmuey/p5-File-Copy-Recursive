@@ -465,9 +465,17 @@ sub _bail_if_changed {
     my ( $path, $orig_dev, $orig_ino ) = @_;
 
     my ( $cur_dev, $cur_ino ) = ( lstat $path )[ 0, 1 ];
+
+    if ( !defined $cur_dev || !defined $cur_ino ) {
+        $cur_dev ||= "undef(path went away?)";
+        $cur_ino ||= "undef(path went away?)";
+    }
+    else {
+        $path = Cwd::abs_path($path);
+    }
+
     if ( $orig_dev ne $cur_dev || $orig_ino ne $cur_ino ) {
         local $Carp::CarpLevel += 1;
-        $path = Cwd::abs_path($path);
         Carp::croak("directory $path changed: expected dev=$orig_dev ino=$orig_ino, actual dev=$cur_dev ino=$cur_ino, aborting");
     }
 }
