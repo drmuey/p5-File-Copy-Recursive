@@ -81,16 +81,18 @@ sub _test {
         local $catdir_toggle = sub {
             return if $func eq 'pathrm' && @catdir_calls < 3;    # let it do its first round, this mockage is gross …
 
-            # use system call since the perl to do this will likely use File::Spec
             chdir $dir || die "could not toggle dir/symlink (chdir): $!";
 
             my $parent = "";
             if ($toggle) {
                 $parent = $toggle;
                 $parent =~ s{[^/]+$}{};
+
+                # use system call since the perl to do this will likely use File::Spec
                 system("/bin/mkdir -p moved/$func/$parent") and die "could not toggle dir/symlink (mkdir): $?\n";
             }
 
+            # use system call since the perl to do this will likely use File::Spec
             system("/bin/mv $dir/$func/$toggle $dir/moved/$func/$toggle") and die "could not toggle dir/symlink (mv): $?\n";
             symlink( "$dir/victim", "$dir/$func" . ( $toggle ? "/$toggle" : "" ) ) or die "could not toggle dir/symlink (sym): $!\n";
 
