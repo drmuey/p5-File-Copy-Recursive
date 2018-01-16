@@ -333,26 +333,26 @@ sub rmove_glob {
 sub dirmove { $move->( 0, @_ ) }
 
 sub pathmk {
-    my ($vol, $dir, $file) = File::Spec->splitpath( shift() );
+    my ( $vol, $dir, $file ) = File::Spec->splitpath( shift() );
     my $nofatal = shift;
 
     $DirPerms = oct($DirPerms) if substr( $DirPerms, 0, 1 ) eq '0';
 
-    if (defined($dir)) {
+    if ( defined($dir) ) {
         my (@dirs) = File::Spec->splitdir($dir);
 
-        for (my $i=0; $i<scalar(@dirs); $i++) {
-            my $newdir = File::Spec->catdir( @dirs[0..$i] );
+        for ( my $i = 0; $i < scalar(@dirs); $i++ ) {
+            my $newdir = File::Spec->catdir( @dirs[ 0 .. $i ] );
             my $newpth = File::Spec->catpath( $vol, $newdir, "" );
-      
+
             mkdir( $newpth, $DirPerms ) or return if !-d $newpth && !$nofatal;
             mkdir( $newpth, $DirPerms ) if !-d $newpth && $nofatal;
         }
     }
 
-    if (defined($file)) {
+    if ( defined($file) ) {
         my $newpth = File::Spec->catpath( $vol, $dir, $file );
-    
+
         mkdir( $newpth, $DirPerms ) or return if !-d $newpth && !$nofatal;
         mkdir( $newpth, $DirPerms ) if !-d $newpth && $nofatal;
     }
