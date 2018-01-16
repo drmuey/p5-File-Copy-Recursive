@@ -237,11 +237,12 @@ sub dircopy {
 
         $DirPerms = oct($DirPerms) if substr( $DirPerms, 0, 1 ) eq '0';
         mkdir( $end, $DirPerms ) or return if !-d $end;
-        chmod scalar( ( stat($str) )[2] ), $end if $KeepMode;
         if ( $MaxDepth && $MaxDepth =~ m/^\d+$/ && $level >= $MaxDepth ) {
+            chmod scalar( ( stat($str) )[2] ), $end if $KeepMode;
             return ( $filen, $dirn, $level ) if wantarray;
             return $filen;
         }
+
         $level++;
 
         my @files;
@@ -308,7 +309,9 @@ sub dircopy {
             }
         }
         $level--;
+        chmod scalar( ( stat($str) )[2] ), $end if $KeepMode;
         1;
+
     };
 
     $recurs->( $_zero, $_one, $_[2] ) or return;
