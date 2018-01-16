@@ -119,14 +119,18 @@ note "functionality w/ default globals";
         File::Copy::Recursive::rcopy( "$tmpd/data_tnl", "$tmpd/rcopy/" );
         is( @fcopy_calls, 3, 'rcopy() dispatches file (w/ no trailing new line) to fcopy()' );
 
-        File::Copy::Recursive::rcopy( "$tmpd/symlink", "$tmpd/rcopy/" );
-        is( @fcopy_calls, 4, 'rcopy() dispatches symlink to fcopy()' );
+      SKIP: {
+            skip "symlink tests not applicable on systems w/ out symlink support ($^O)", 3 unless $File::Copy::Recursive::CopyLink;
 
-        File::Copy::Recursive::rcopy( "$tmpd/symlink-broken", "$tmpd/rcopy/" );
-        is( @fcopy_calls, 5, 'rcopy() dispatches broken symlink to fcopy()' );
+            File::Copy::Recursive::rcopy( "$tmpd/symlink", "$tmpd/rcopy/" );
+            is( @fcopy_calls, 4, 'rcopy() dispatches symlink to fcopy()' );
 
-        File::Copy::Recursive::rcopy( "$tmpd/symlink-loopy", "$tmpd/rcopy/" );
-        is( @fcopy_calls, 6, 'rcopy() dispatches loopish symlink to fcopy()' );
+            File::Copy::Recursive::rcopy( "$tmpd/symlink-broken", "$tmpd/rcopy/" );
+            is( @fcopy_calls, 5, 'rcopy() dispatches broken symlink to fcopy()' );
+
+            File::Copy::Recursive::rcopy( "$tmpd/symlink-loopy", "$tmpd/rcopy/" );
+            is( @fcopy_calls, 6, 'rcopy() dispatches loopish symlink to fcopy()' );
+        }
     }
 
     # rmove()
@@ -155,14 +159,18 @@ note "functionality w/ default globals";
         File::Copy::Recursive::rmove( "$tmpd/data_tnl", "$tmpd/rmove/" );
         is( @fmove_calls, 3, 'rmove() dispatches file (w/ no trailing new line) to fcopy()' );
 
-        File::Copy::Recursive::rmove( "$tmpd/symlink", "$tmpd/rmove/" );
-        is( @fmove_calls, 4, 'rmove() dispatches symlink to fcopy()' );
+      SKIP: {
+            skip "symlink tests not applicable on systems w/ out symlink support ($^O)", 3 unless $File::Copy::Recursive::CopyLink;
 
-        File::Copy::Recursive::rmove( "$tmpd/symlink-broken", "$tmpd/rmove/" );
-        is( @fmove_calls, 5, 'rmove() dispatches broken symlink to fcopy()' );
+            File::Copy::Recursive::rmove( "$tmpd/symlink", "$tmpd/rmove/" );
+            is( @fmove_calls, 4, 'rmove() dispatches symlink to fcopy()' );
 
-        File::Copy::Recursive::rmove( "$tmpd/symlink-loopy", "$tmpd/rmove/" );
-        is( @fmove_calls, 6, 'rmove() dispatches loopish symlink to fcopy()' );
+            File::Copy::Recursive::rmove( "$tmpd/symlink-broken", "$tmpd/rmove/" );
+            is( @fmove_calls, 5, 'rmove() dispatches broken symlink to fcopy()' );
+
+            File::Copy::Recursive::rmove( "$tmpd/symlink-loopy", "$tmpd/rmove/" );
+            is( @fmove_calls, 6, 'rmove() dispatches loopish symlink to fcopy()' );
+        }
     }
 
     # rcopy_glob()
@@ -304,9 +312,11 @@ sub _get_fresh_tmp_dir {
         write_file( "$tmpd/$dir/empty",    "" );
         write_file( "$tmpd/$dir/data",     "oh hai\n$tmpd/$dir" );
         write_file( "$tmpd/$dir/data_tnl", "oh hai\n$tmpd/$dir\n" );
-        symlink( "data",    "$tmpd/$dir/symlink" );
-        symlink( "noexist", "$tmpd/$dir/symlink-broken" );
-        symlink( "..",      "$tmpd/$dir/symlink-loopy" );
+        if ($File::Copy::Recursive::CopyLink) {
+            symlink( "data",    "$tmpd/$dir/symlink" );
+            symlink( "noexist", "$tmpd/$dir/symlink-broken" );
+            symlink( "..",      "$tmpd/$dir/symlink-loopy" );
+        }
     }
 
     return $tmpd;
