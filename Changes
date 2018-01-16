@@ -1,5 +1,8 @@
 Revision history for Perl extension File::Copy::Recursive.
 
+0.40
+    - Issue #5 - Deep directories pathmk
+
 0.39 Fri Dec 29 13:26:12 2017
     - tidy code
     - Change into directory before emptying it
