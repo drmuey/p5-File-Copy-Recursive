@@ -6,4 +6,5 @@ lib/File/Copy/Recursive.pm
 t/00.load.t
 t/01.legacy.t
 t/02.legacy-symtogsafe.t
+t/03.github-issue-5.t
 META.yml                                Module meta-data (added by MakeMaker)

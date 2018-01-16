@@ -333,24 +333,30 @@ sub rmove_glob {
 sub dirmove { $move->( 0, @_ ) }
 
 sub pathmk {
-    my @parts   = File::Spec->splitpath( shift() );
+    my ($vol, $dir, $file) = File::Spec->splitpath( shift() );
     my $nofatal = shift;
-    my $pth     = $parts[0];
-    my $zer     = 0;
-    if ( !$pth ) {
-        $pth = File::Spec->catpath( $parts[0], $parts[1], '' );
-        $zer = 1;
+
+    $DirPerms = oct($DirPerms) if substr( $DirPerms, 0, 1 ) eq '0';
+
+    if (defined($dir)) {
+        my (@dirs) = File::Spec->splitdir($dir);
+
+        for (my $i=0; $i<scalar(@dirs); $i++) {
+            my $newdir = File::Spec->catdir( @dirs[0..$i] );
+            my $newpth = File::Spec->catpath( $vol, $newdir, "" );
+      
+            mkdir( $newpth, $DirPerms ) or return if !-d $newpth && !$nofatal;
+            mkdir( $newpth, $DirPerms ) if !-d $newpth && $nofatal;
+        }
     }
-    if ( !$pth ) {
-        $pth = File::Spec->catpath( $parts[0], $parts[1], $parts[2] );
-        $zer = 2;
+
+    if (defined($file)) {
+        my $newpth = File::Spec->catpath( $vol, $dir, $file );
+    
+        mkdir( $newpth, $DirPerms ) or return if !-d $newpth && !$nofatal;
+        mkdir( $newpth, $DirPerms ) if !-d $newpth && $nofatal;
     }
-    for ( $zer .. $#parts ) {
-        $DirPerms = oct($DirPerms) if substr( $DirPerms, 0, 1 ) eq '0';
-        mkdir( $pth, $DirPerms ) or return if !-d $pth && !$nofatal;
-        mkdir( $pth, $DirPerms ) if !-d $pth && $nofatal;
-        $pth = File::Spec->catdir( $pth, $parts[ $_ + 1 ] ) unless $_ == $#parts;
-    }
+
     1;
 }
 
