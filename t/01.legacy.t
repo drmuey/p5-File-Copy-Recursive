@@ -179,7 +179,7 @@ note "functionality w/ default globals";
         no warnings "redefine";
         local *File::Copy::Recursive::rcopy = sub { push @rcopy_srcs, $_[0] };
         rcopy_glob( "$tmpd/orig/*l*", "$tmpd/rcopy_glob" );
-        is( @rcopy_srcs, 4, "rcopy_glob() calls rcopy for each file in the glob" );
+        is( @rcopy_srcs, $File::Copy::Recursive::CopyLink?4:1, "rcopy_glob() calls rcopy for each file in the glob" );
     }
 
     # rmove_glob()
@@ -188,7 +188,7 @@ note "functionality w/ default globals";
         no warnings "redefine";
         local *File::Copy::Recursive::rmove = sub { push @rmove_srcs, $_[0] };
         rmove_glob( "$tmpd/orig/*l*", "$tmpd/rmove_glob" );
-        is( @rmove_srcs, 4, "rmove_glob() calls rmove for each file in the glob" );
+        is( @rmove_srcs, $File::Copy::Recursive::CopyLink?4:1, "rmove_glob() calls rmove for each file in the glob" );
     }
 
     # PATCHES WELCOME!
