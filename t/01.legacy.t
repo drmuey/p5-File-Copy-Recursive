@@ -191,6 +191,25 @@ note "functionality w/ default globals";
         is( @rmove_srcs, $File::Copy::Recursive::CopyLink?4:1, "rmove_glob() calls rmove for each file in the glob" );
     }
 
+    # pathempty()
+    {
+        ok(-e "$tmpd/new/data", "file exists");
+        my $rv = pathempty( "$tmpd/new" );
+        is($rv, 1, "correct return value for pathempty");
+        ok(!-e "$tmpd/new/data", "file was removed");
+        ok(-d "$tmpd/new", "directory still exists");
+    }
+
+    # pathrmdir()
+    {
+        my $rv = pathrmdir( "$tmpd/orig" );
+        is($rv, 1, "correct return value for pathrmdir");
+        ok(!-d "$tmpd/orig", "directory was removed");
+    }
+
+
+
+
     # PATCHES WELCOME!
     #     TODO: tests for sameness behavior and it use in all of these functions
     #     TODO: @rv behavior in all of these functions
