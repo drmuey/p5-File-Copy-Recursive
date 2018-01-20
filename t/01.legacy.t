@@ -347,6 +347,8 @@ sub _get_tree_hr {
     my %tree;
     my $fetch = path($dir)->iterator;
 
+    $dir =~ s#\\#\/#g if $^O eq 'MSWin32'; #->iterator returns paths with '/'
+
     while ( my $next_path = $fetch->() ) {
         my $normalized_next_path = $next_path;
         $normalized_next_path =~ s/\Q$dir\E//;
