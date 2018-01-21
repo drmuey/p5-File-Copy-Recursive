@@ -22,4 +22,19 @@ WriteMakefile(
         'Test::Warn'      => 0,
         'Path::Tiny'      => 0,
     },
+    META_ADD => {
+        'meta-spec' => { version => 2 },
+        dynamic_config => 0,
+        resources => {
+            repository => {
+                url => 'https://github.com/drmuey/p5-File-Copy-Recursive.git',
+                web => 'https://github.com/drmuey/p5-File-Copy-Recursive',
+                type => 'git',
+            },
+            bugtracker => {
+                mailto => 'bug-File-Copy-Recursive@rt.cpan.org',
+                web => 'https://rt.cpan.org/Public/Dist/Display.html?Name=File-Copy-Recursive',
+            },
+        },
+    },
 );
