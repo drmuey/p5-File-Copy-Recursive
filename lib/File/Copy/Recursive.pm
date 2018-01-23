@@ -167,6 +167,9 @@ sub fcopy {
         unlink $new if -l $new;
         symlink( $target, $new ) or return;
     }
+    elsif ( -d $_[0] && -f $_[1] ) {
+        return;
+    }
     else {
         copy(@_) or return;
 
