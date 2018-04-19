@@ -171,6 +171,7 @@ sub fcopy {
         return;
     }
     else {
+        return if -d $_[0];                # address File::Copy::copy() bug outlined in https://rt.perl.org/Public/Bug/Display.html?id=132866
         copy(@_) or return;
 
         my @base_file = File::Spec->splitpath( $_[0] );
