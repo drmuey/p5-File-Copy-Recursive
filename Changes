@@ -7,6 +7,7 @@ Revision history for Perl extension File::Copy::Recursive.
     - rt 124324 - fix v0.40 changelog date (thanks ANDK)
     - rt 124151 - pathrm with force on should guard against absolute paths (thanks chorny)
     - rt 124423 - have fcopy() work around File::Copy::copy() bug rt132866 (thanks DROLSKY)
+    - Issue #12 and rt 124166 - set umask for reliability (thanks teoric and ether)
 
 0.40 Tue Jan 16 10:00:09 2018
     - github Issue #5 - Deep directories pathmk

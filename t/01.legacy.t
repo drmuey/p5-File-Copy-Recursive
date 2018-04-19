@@ -18,6 +18,8 @@ use File::Temp;
 
 use File::Copy::Recursive qw(fcopy rcopy dircopy fmove rmove dirmove pathmk pathrm pathempty pathrmdir rcopy_glob rmove_glob);
 
+umask 022;    # for consistent testing
+
 note "functionality w/ default globals";
 {
     is( $File::Copy::Recursive::DirPerms, 0777, "DirPerms default is 0777" );
