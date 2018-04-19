@@ -422,6 +422,12 @@ sub pathrm {
     my ( $orig_dev, $orig_ino ) = ( lstat $path )[ 0, 1 ];
     return 2 if !-d _ || !$orig_dev || !$orig_ino;
 
+    # Manual test (I hate this function :/):
+    #    sudo mkdir /foo && perl -MFile::Copy::Recursive=pathrm -le 'print pathrm("/foo",1)' && sudo rm -rf /foo
+    if ( $force && File::Spec->file_name_is_absolute($path) ) {
+        Carp::croak("pathrm() w/ force on abspath is not allowed");
+    }
+
     my @pth = File::Spec->splitdir($path);
 
     my %fs_check;

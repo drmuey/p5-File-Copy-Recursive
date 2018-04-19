@@ -6,6 +6,7 @@ Revision history for Perl extension File::Copy::Recursive.
     - Issue #11: Fix the test failure described in RT#123964 (thanks tomhukins and SREZIC)
     - Issue #9: Fixes for Windows (thanks chorny)
     - rt 124324 - fix v0.40 changelog date (thanks ANDK)
+    - rt 124151 - pathrm with force on should guard against absolute paths (thanks chorny)
 
 0.40 Tue Jan 16 10:00:09 2018
     - github Issue #5 - Deep directories pathmk
