@@ -371,7 +371,7 @@ sub pathempty {
     my $pth = shift;
 
     my ( $orig_dev, $orig_ino ) = ( lstat $pth )[ 0, 1 ];
-    return 2 if !-d _ || !$orig_dev || ($^O ne 'MSWin32' && !$orig_ino); #stat.inode is 0 on Windows
+    return 2 if !-d _ || !$orig_dev || ( $^O ne 'MSWin32' && !$orig_ino );    #stat.inode is 0 on Windows
 
     my $starting_point = Cwd::cwd();
     my ( $starting_dev, $starting_ino ) = ( lstat $starting_point )[ 0, 1 ];
@@ -471,7 +471,7 @@ sub pathrmdir {
     }
 
     my ( $orig_dev, $orig_ino ) = ( lstat $dir )[ 0, 1 ];
-    return 2 if !$orig_dev || ($^O ne 'MSWin32' && !$orig_ino);
+    return 2 if !$orig_dev || ( $^O ne 'MSWin32' && !$orig_ino );
 
     pathempty($dir) or return;
     _bail_if_changed( $dir, $orig_dev, $orig_ino );
