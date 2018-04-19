@@ -2,6 +2,9 @@ Revision history for Perl extension File::Copy::Recursive.
 
 0.41 UNRELEASED
 
+    - Issue #10 and #8: fix Makefile.PL; add github metadata (thanks karenetheridge and chorny)
+    - Issue #11: Fix the test failure described in RT#123964 (thanks tomhukins and SREZIC)
+    - Issue #9: Fixes for Windows (thanks chorny)
     - rt 124324 - fix v0.40 changelog date (thanks ANDK)
 
 0.40 Tue Jan 16 10:00:09 2018
