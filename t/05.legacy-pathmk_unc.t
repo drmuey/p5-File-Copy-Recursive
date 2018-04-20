@@ -5,7 +5,6 @@ use Cwd;
 use File::Copy::Recursive qw(pathmk pathempty);
 use File::Find::Rule;
 use File::Temp ();
-use Test::Exception;
 use Test::More;
 
 diag("Testing legacy File::Copy::Recursive::pathmk() $File::Copy::Recursive::VERSION");

@@ -19,9 +19,9 @@ WriteMakefile(
         'Test::File'       => 0,
         'File::Temp'       => 0,
         'File::Find::Rule' => 0,
-        'Test::Exception'  => 0,
         'Test::Warn'       => 0,
         'Path::Tiny'       => 0,
+        'Test::Fatal'      => 0,
     },
     META_ADD => {
         'meta-spec'    => { version => 2 },
