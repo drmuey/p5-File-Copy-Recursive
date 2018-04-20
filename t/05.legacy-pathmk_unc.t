@@ -26,7 +26,7 @@ sub translate_to_unc {
     else {
         # a relative path
         my ($sep) = $path =~ m|([\\/])|;    # locate path separator
-        $sep //= '\\';                      # default to backslash
+        $sep ||= '\\';                      # default to backslash
         $path = translate_to_unc( Cwd::getcwd() . $sep . $path );
 
         # assumes that Cwd::getcwd() returns a path with a drive letter!
