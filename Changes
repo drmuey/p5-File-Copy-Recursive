@@ -1,7 +1,8 @@
 Revision history for Perl extension File::Copy::Recursive.
 
-    - strip down list of prerequisites to moduels that are safe to use high on
-      the CPAN river
+0.43 UNLRELEASED
+    - pull request #16 - strip down list of prerequisites to modules that are safe to use high on
+      the CPAN river (thanks karenetheridge)
 
 0.42 Fri Apr 20 23:42:41 2018
     - rt 125136 - reinstate 5.8 compat by not using // operator in the new unc test (thanks SREZIC)
