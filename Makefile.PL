@@ -14,7 +14,7 @@ WriteMakefile(
         'Cwd'        => 0,
     },
     TEST_REQUIRES => {
-        'Test::More'       => 0,
+        'Test::More'       => '0.88',
         'Test::Deep'       => 0,
         'Test::File'       => 0,
         'File::Temp'       => 0,
