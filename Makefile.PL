@@ -19,7 +19,7 @@ WriteMakefile(
         'Test::File'       => 0,
         'File::Temp'       => 0,
         'File::Find::Rule' => 0,
-        'Test::Warn'       => 0,
+        'Test::Warnings'   => 0,
         'Path::Tiny'       => 0,
         'Test::Fatal'      => 0,
     },
