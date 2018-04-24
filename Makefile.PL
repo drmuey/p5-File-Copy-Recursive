@@ -7,6 +7,7 @@ WriteMakefile(
     VERSION_FROM  => 'lib/File/Copy/Recursive.pm',
     ABSTRACT_FROM => 'lib/File/Copy/Recursive.pm',
     AUTHOR        => 'Daniel Muey <http://drmuey.com/cpan_contact.pl>',
+    LICENSE       => 'perl_5',
     PREREQ_PM     => {
         'File::Copy' => 0,
         'File::Spec' => 0,
