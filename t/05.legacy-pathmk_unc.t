@@ -6,7 +6,6 @@ use File::Copy::Recursive qw(pathmk pathempty);
 use File::Temp ();
 use Path::Tiny;
 use Test::More;
-use Test::Deep;
 
 if ( $^O ne 'MSWin32' ) {
     plan skip_all => 'Test irrelevant on non-windows OSs';
@@ -28,11 +27,7 @@ is_deeply( \@members, [], 'sanity check: created empty temp dir' );
 pathmk("$tempdir\\foo\\bar\\baz");    # create regular path
 
 @members = _all_files_in($tempdir);
-cmp_deeply(
-    \@members,
-    bag( "$tempdir\\foo", "$tempdir\\foo\\bar", "$tempdir\\foo\\bar\\baz" ),
-    'pathmk(regular path)'
-);
+ok( -d "$tempdir\\foo\\bar\\baz", "pathmk(regular path) creates path" );
 
 pathempty($tempdir);
 
@@ -44,11 +39,7 @@ my $uncpath = _translate_to_unc($tempdir);
 pathmk("$uncpath\\foo\\bar\\baz");    # create UNC path
 
 @members = _all_files_in($tempdir);
-cmp_deeply(
-    \@members,
-    bag( $tempdir, "$tempdir\\foo", "$tempdir\\foo\\bar", "$tempdir\\foo\\bar\\baz" ),
-    'pathmk(unc path)'
-);
+ok( -d "$tempdir\\foo\\bar\\baz", "pathmk(unc path) creates path" );
 
 ###############
 #### helpers ##
