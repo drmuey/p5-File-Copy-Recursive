@@ -1,6 +1,7 @@
 Revision history for Perl extension File::Copy::Recursive.
 
 0.45 UNRELEASED
+    - PR #21: fix version 0.43 in Changes file (thanks karenetheridge)
 
 0.44 Tue Apr 24 08:18:19 2018
     - Issue #18: fix t/05.legacy-pathmk_unc.t for recent updates (thanks zdm)
