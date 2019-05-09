@@ -29,4 +29,4 @@ requires:
   Test::File: '0'
   Test::More: '0'
   Test::Warn: '0'
-version: '0.44'
+version: '0.45'
