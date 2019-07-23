@@ -29,6 +29,14 @@ requires:
   File::Copy: '0'
   File::Glob: '0'
   File::Spec: '0'
+  File::Temp: '0'
+  Path::Tiny: '0'
+  Test::Deep: '0'
+  Test::Exception: '0'
+  Test::File: '0'
+  Test::More: '0'
+  Test::Warn: '0'
+version: '0.45'
 resources:
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=File-Copy-Recursive
   repository: https://github.com/drmuey/p5-File-Copy-Recursive.git
