@@ -33,8 +33,7 @@ WriteMakefile(
                 type => 'git',
             },
             bugtracker => {
-                mailto => 'bug-File-Copy-Recursive@rt.cpan.org',
-                web    => 'https://rt.cpan.org/Public/Dist/Display.html?Name=File-Copy-Recursive',
+                web    => 'https://github.com/drmuey/p5-File-Copy-Recursive/issues',
             },
         },
     },
